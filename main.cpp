@@ -46,7 +46,7 @@ int main() {
     std :: cout << "Can you get to 2048?\n";
     displayBox();
     Tile Bob;
-    std :: cout << Bob.value << "did it work?";
+    std :: cout << Bob.value << "did it work?\n";
 
     return 0;
 }
