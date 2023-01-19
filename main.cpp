@@ -88,16 +88,16 @@ string boxValue(int number)
 }
 
 // displays the grid of values
-void displayBox(int gridVal[4][4])
+void displayBox(Tile gridVal[4][4])
 {
     std ::cout << " ____ ____ ____ ____ \n"
-               << "|" << boxValue(gridVal[0][0]) << "|" << boxValue(gridVal[1][0]) << "|" << boxValue(gridVal[2][0]) << "|" << boxValue(gridVal[3][0]) << "|\n"
+               << "|" << boxValue(gridVal[0][0].getValue()) << "|" << boxValue(gridVal[1][0].getValue()) << "|" << boxValue(gridVal[2][0].getValue()) << "|" << boxValue(gridVal[3][0].getValue()) << "|\n"
                << "|____|____|____|____|\n"
-               << "|" << boxValue(gridVal[0][1]) << "|" << boxValue(gridVal[1][1]) << "|" << boxValue(gridVal[2][1]) << "|" << boxValue(gridVal[3][1]) << "|\n"
+               << "|" << boxValue(gridVal[0][1].getValue()) << "|" << boxValue(gridVal[1][1].getValue()) << "|" << boxValue(gridVal[2][1].getValue()) << "|" << boxValue(gridVal[3][1].getValue()) << "|\n"
                << "|____|____|____|____|\n"
-               << "|" << boxValue(gridVal[0][2]) << "|" << boxValue(gridVal[1][2]) << "|" << boxValue(gridVal[2][2]) << "|" << boxValue(gridVal[3][2]) << "|\n"
+               << "|" << boxValue(gridVal[0][2].getValue()) << "|" << boxValue(gridVal[1][2].getValue()) << "|" << boxValue(gridVal[2][2].getValue()) << "|" << boxValue(gridVal[3][2].getValue()) << "|\n"
                << "|____|____|____|____|\n"
-               << "|" << boxValue(gridVal[0][3]) << "|" << boxValue(gridVal[1][3]) << "|" << boxValue(gridVal[2][3]) << "|" << boxValue(gridVal[3][3]) << "|\n"
+               << "|" << boxValue(gridVal[0][3].getValue()) << "|" << boxValue(gridVal[1][3].getValue()) << "|" << boxValue(gridVal[2][3].getValue()) << "|" << boxValue(gridVal[3][3].getValue()) << "|\n"
                << "|____|____|____|____|\n";
 }
 
@@ -105,36 +105,187 @@ void displayBox(int gridVal[4][4])
 void game()
 {
     Tile grid[4][4];
-    string input;
+    char input;
     int gridVal[4][4] = {0};
     bool gameOver = false;
     bool gameWin = false;
     int activeCount = 0;
     int inactiveCount = -1;
     int inactiveTiles[16][2];
-    bool emptySquareFound;
-    
+    int turns = 0;
+
+    // sets a random inactive member of the grid to active to initiate
+    int rx = rand() % 4;
+    int ry = rand() % 4;
+    grid[rx][ry].activate();
+    gridVal[rx][ry] = grid[rx][ry].getValue();
+    int rz; // a surprize tool that will help us later;
 
     do
     {
-        emptySquareFound = false;
 
-        // sets a random inactive member of the grid to active
-        if (inactiveCount == -1)
-        {
-            int rx = rand() % 4;
-            int ry = rand() % 4;
-            grid[rx][ry].activate();
-            gridVal[rx][ry] = grid[rx][ry].getValue();
-            cout << gridVal[rx][ry];
-        }
-        else
-        {
-            int rz = rand() % inactiveCount;
-        }
-
-        displayBox(gridVal);
+        displayBox(grid);
+        std::cout << "Q|quit\tw|up\ts|down\ta|left\td|right\n";
         cin >> input;
+        turns++;
+
+        // TODO: ADJUST NON UP OPTIONS
+        if (input == 'Q')
+        {
+            gameOver = true;
+        }
+        else if (input == 'w')
+        {
+            // searches for active tiles
+            for (int x = 0; x < 4; x++)
+            {
+                for (int y = 1; y < 4; y++)
+                {
+                    if (grid[x][y].isActive())
+                    {
+                        // checks tiles in same row/column and moves, deactivates, or increases them accordingly
+                        for (int i = 1; i <= y; i++)
+                        {
+                            if (grid[x][y - i].isActive())
+                            {
+                                if (grid[x][y - i].getValue() == grid[x][y].getValue())
+                                {
+                                    grid[x][y - i].doubleValue();
+                                    grid[x][y].deactivate();
+                                    i = 100;
+                                }
+                                else if (i != 1)
+                                {
+                                    grid[x][y - i + 1] = grid[x][y];
+                                    grid[x][y].deactivate();
+                                    i = 100;
+                                }
+                            }
+                            else if (y - i == 0)
+                            {
+                                grid[x][0] = grid[x][y];
+                                grid[x][y].deactivate();
+                                i = 100;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (input == 's')
+        {
+            // searches for active tiles
+            for (int x = 0; x < 4; x++)
+            {
+                for (int y = 2; y > -1; y--)
+                {
+                    if (grid[x][y].isActive())
+                    {
+                        // checks tiles in same row/column and moves, deactivates, or increases them accordingly
+                        for (int i = 1; i <= y; i++)
+                        {
+                            if (grid[x][y - i].isActive())
+                            {
+                                if (grid[x][y - i].getValue() == grid[x][y].getValue())
+                                {
+                                    grid[x][y - i].doubleValue();
+                                    grid[x][y].deactivate();
+                                    i = 100;
+                                }
+                                else if (i != 1)
+                                {
+                                    grid[x][y - i + 1] = grid[x][y];
+                                    grid[x][y].deactivate();
+                                    i = 100;
+                                }
+                            }
+                            else if (y - i == 0)
+                            {
+                                grid[x][0] = grid[x][y];
+                                grid[x][y].deactivate();
+                                i = 100;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (input == 'a')
+        {
+            // searches for active tiles
+            for (int x = 0; x < 4; x++)
+            {
+                for (int y = 1; y < 4; y++)
+                {
+                    if (grid[x][y].isActive())
+                    {
+                        // checks tiles in same row/column and moves, deactivates, or increases them accordingly
+                        for (int i = 1; i <= y; i++)
+                        {
+                            if (grid[x][y - i].isActive())
+                            {
+                                if (grid[x][y - i].getValue() == grid[x][y].getValue())
+                                {
+                                    grid[x][y - i].doubleValue();
+                                    grid[x][y].deactivate();
+                                    i = 100;
+                                }
+                                else if (i != 1)
+                                {
+                                    grid[x][y - i + 1] = grid[x][y];
+                                    grid[x][y].deactivate();
+                                    i = 100;
+                                }
+                            }
+                            else if (y - i == 0)
+                            {
+                                grid[x][0] = grid[x][y];
+                                grid[x][y].deactivate();
+                                i = 100;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (input == 'd')
+        {
+            // searches for active tiles
+            for (int x = 0; x < 4; x++)
+            {
+                for (int y = 1; y < 4; y++)
+                {
+                    if (grid[x][y].isActive())
+                    {
+                        // checks tiles in same row/column and moves, deactivates, or increases them accordingly
+                        for (int i = 1; i <= y; i++)
+                        {
+                            if (grid[x][y - i].isActive())
+                            {
+                                if (grid[x][y - i].getValue() == grid[x][y].getValue())
+                                {
+                                    grid[x][y - i].doubleValue();
+                                    grid[x][y].deactivate();
+                                    i = 100;
+                                }
+                                else if (i != 1)
+                                {
+                                    grid[x][y - i + 1] = grid[x][y];
+                                    grid[x][y].deactivate();
+                                    i = 100;
+                                }
+                            }
+                            else if (y - i == 0)
+                            {
+                                grid[x][0] = grid[x][y];
+                                grid[x][y].deactivate();
+                                i = 100;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         // Checks in there are no free squares
 
@@ -145,8 +296,6 @@ void game()
             inactiveTiles[i][0] = 0;
             inactiveTiles[i][1] = 0;
         }
-
-        
 
         for (int x = 0; x < 4; x++)
         {
@@ -165,10 +314,23 @@ void game()
             }
         }
 
+        // sets a random inactive member of the grid to active
+        rz = rand() % inactiveCount;
+        grid[inactiveTiles[rz][0]][inactiveTiles[rz][1]].activate();
+
         if (activeCount >= 16)
             gameOver = true;
 
-    } while (!gameOver || !gameWin);
+    } while (!gameOver && !gameWin);
+
+    if (gameOver)
+    {
+        std::cout << "too bad so sad\n";
+    }
+    else if (gameWin)
+    {
+        std::cout << "\tCongratulations! you did it in " << turns << " turns!\n";
+    }
 }
 
 int main()
