@@ -119,7 +119,6 @@ void game()
     int ry = rand() % 4;
     grid[rx][ry].activate();
     gridVal[rx][ry] = grid[rx][ry].getValue();
-    int rz; // a surprize tool that will help us later;
 
     do
     {
@@ -160,6 +159,10 @@ void game()
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
+                                else
+                                {
+                                    i = 100;
+                                }
                             }
                             else if (y - i == 0)
                             {
@@ -182,26 +185,30 @@ void game()
                     if (grid[x][y].isActive())
                     {
                         // checks tiles in same row/column and moves, deactivates, or increases them accordingly
-                        for (int i = 1; i <= y; i++)
+                        for (int i = 1; i + y < 4; i++)
                         {
-                            if (grid[x][y - i].isActive())
+                            if (grid[x][y + i].isActive())
                             {
-                                if (grid[x][y - i].getValue() == grid[x][y].getValue())
+                                if (grid[x][y + i].getValue() == grid[x][y].getValue())
                                 {
-                                    grid[x][y - i].doubleValue();
+                                    grid[x][y + i].doubleValue();
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
-                                else if (i != 1)
+                                else if (i != 1) // does not move if adjacent to the next active tile
                                 {
-                                    grid[x][y - i + 1] = grid[x][y];
+                                    grid[x][y + i - 1] = grid[x][y];
                                     grid[x][y].deactivate();
+                                    i = 100;
+                                }
+                                else
+                                {
                                     i = 100;
                                 }
                             }
-                            else if (y - i == 0)
+                            else if (y + i == 3)
                             {
-                                grid[x][0] = grid[x][y];
+                                grid[x][3] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
                             }
@@ -213,33 +220,37 @@ void game()
         else if (input == 'a')
         {
             // searches for active tiles
-            for (int x = 0; x < 4; x++)
+            for (int y = 0; y < 4; y++)
             {
-                for (int y = 1; y < 4; y++)
+                for (int x = 1; x < 4; x++)
                 {
                     if (grid[x][y].isActive())
                     {
                         // checks tiles in same row/column and moves, deactivates, or increases them accordingly
-                        for (int i = 1; i <= y; i++)
+                        for (int i = 1; i <= x; i++)
                         {
-                            if (grid[x][y - i].isActive())
+                            if (grid[x - i][y].isActive())
                             {
-                                if (grid[x][y - i].getValue() == grid[x][y].getValue())
+                                if (grid[x - i][y].getValue() == grid[x][y].getValue())
                                 {
-                                    grid[x][y - i].doubleValue();
+                                    grid[x - i][y].doubleValue();
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
                                 else if (i != 1)
                                 {
-                                    grid[x][y - i + 1] = grid[x][y];
+                                    grid[x - i + 1][y] = grid[x][y];
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
+                                else
+                                {
+                                    i = 100;
+                                }
                             }
-                            else if (y - i == 0)
+                            else if (x - i == 0)
                             {
-                                grid[x][0] = grid[x][y];
+                                grid[0][y] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
                             }
@@ -250,34 +261,37 @@ void game()
         }
         else if (input == 'd')
         {
-            // searches for active tiles
-            for (int x = 0; x < 4; x++)
+            for (int y = 0; y < 4; y++)
             {
-                for (int y = 1; y < 4; y++)
+                for (int x = 2; x > -1; x--)
                 {
                     if (grid[x][y].isActive())
                     {
                         // checks tiles in same row/column and moves, deactivates, or increases them accordingly
-                        for (int i = 1; i <= y; i++)
+                        for (int i = 1; i + x < 4; i++)
                         {
-                            if (grid[x][y - i].isActive())
+                            if (grid[x + i][y].isActive())
                             {
-                                if (grid[x][y - i].getValue() == grid[x][y].getValue())
+                                if (grid[x + i][y].getValue() == grid[x][y].getValue())
                                 {
-                                    grid[x][y - i].doubleValue();
+                                    grid[x + i][y].doubleValue();
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
-                                else if (i != 1)
+                                else if (i != 1) // does not move if adjacent to the next active tile
                                 {
-                                    grid[x][y - i + 1] = grid[x][y];
+                                    grid[x + i - 1][y] = grid[x][y];
                                     grid[x][y].deactivate();
+                                    i = 100;
+                                }
+                                else
+                                {
                                     i = 100;
                                 }
                             }
-                            else if (y - i == 0)
+                            else if (x + i == 3)
                             {
-                                grid[x][0] = grid[x][y];
+                                grid[3][y] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
                             }
@@ -315,21 +329,39 @@ void game()
         }
 
         // sets a random inactive member of the grid to active
-        rz = rand() % inactiveCount;
-        grid[inactiveTiles[rz][0]][inactiveTiles[rz][1]].activate();
+        if (inactiveCount > 0)
+        {
+            int rz = rand() % inactiveCount;
+            grid[inactiveTiles[rz][0]][inactiveTiles[rz][1]].activate();
+        }
+
+        for (int x = 0; x < 4; x++)
+        {
+            for (int y = 0; y < 4; y++)
+            {
+                if (grid[x][y].getValue() == 2048)
+                {
+                    gameWin = true;
+                }
+            }
+        }
 
         if (activeCount >= 16)
             gameOver = true;
 
     } while (!gameOver && !gameWin);
 
-    if (gameOver)
+    if (gameWin)
     {
-        std::cout << "too bad so sad\n";
+        displayBox(grid);
+
+        std::cout << "Congratulations! you did it in " << turns << " turns!\n";
     }
-    else if (gameWin)
+    else if (gameOver)
     {
-        std::cout << "\tCongratulations! you did it in " << turns << " turns!\n";
+        displayBox(grid);
+
+        std::cout << "too bad so sad\n";
     }
 }
 
