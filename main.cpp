@@ -12,9 +12,17 @@ class Tile
 private:
     int value = 0;
     bool active = false;
+    bool combined = false;
 
 public:
-    bool canAdd = true;
+    bool isCombined()
+    {
+        return combined;
+    }
+    void reset()
+    {
+        combined = false;
+    }
     bool isActive()
     {
         return active;
@@ -26,6 +34,7 @@ public:
     void doubleValue()
     {
         value = value * 2;
+        combined = true;
     };
 
     void activate()
@@ -45,7 +54,6 @@ public:
         }
 
         active = true;
-        canAdd = true;
     }
 
     void deactivate()
@@ -149,10 +157,9 @@ void game()
                         {
                             if (grid[x][y - i].isActive())
                             {
-                                if (grid[x][y - i].getValue() == grid[x][y].getValue() && grid[x][y].canAdd && grid[x][y - i].canAdd)
+                                if (grid[x][y - i].getValue() == grid[x][y].getValue() && !grid[x][y - i].isCombined())
                                 {
                                     grid[x][y - i].doubleValue();
-                                    grid[x][y - i].canAdd = false;
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
@@ -192,7 +199,7 @@ void game()
                         {
                             if (grid[x][y + i].isActive())
                             {
-                                if (grid[x][y + i].getValue() == grid[x][y].getValue() && grid[x][y].canAdd && grid[x][y + i].canAdd)
+                                if (grid[x][y + i].getValue() == grid[x][y].getValue() && !grid[x][y + i].isCombined())
                                 {
                                     grid[x][y + i].doubleValue();
                                     grid[x][y].deactivate();
@@ -234,7 +241,7 @@ void game()
                         {
                             if (grid[x - i][y].isActive())
                             {
-                                if (grid[x - i][y].getValue() == grid[x][y].getValue() && grid[x][y].canAdd && grid[x - i][y].canAdd)
+                                if (grid[x - i][y].getValue() == grid[x][y].getValue() && !grid[x - i][y].isCombined())
                                 {
                                     grid[x - i][y].doubleValue();
                                     grid[x][y].deactivate();
@@ -275,7 +282,7 @@ void game()
                         {
                             if (grid[x + i][y].isActive())
                             {
-                                if (grid[x + i][y].getValue() == grid[x][y].getValue()  && grid[x][y].canAdd && grid[x + i][y].canAdd)
+                                if (grid[x + i][y].getValue() == grid[x][y].getValue() && !grid[x + i][y].isCombined())
                                 {
                                     grid[x + i][y].doubleValue();
                                     grid[x][y].deactivate();
@@ -342,11 +349,11 @@ void game()
         {
             for (int y = 0; y < 4; y++)
             {
-                grid[x][y].canAdd = true;
                 if (grid[x][y].getValue() == 2048)
                 {
                     gameWin = true;
                 }
+                grid[x][y].reset();
             }
         }
 
