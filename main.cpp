@@ -397,7 +397,7 @@ void game()
 int main()
 {
     srand(time(0));
-    std ::cout << "Can you get to 2048?\n";
+    std::cout << "Can you get to 2048?\n";
     game();
 
     return 0;
