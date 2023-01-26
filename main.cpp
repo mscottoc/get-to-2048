@@ -129,53 +129,35 @@ void game()
     grid[rx][ry].activate();
     gridVal[rx][ry] = grid[rx][ry].getValue();
 
-    // handles player input and changes the grid accordingly
-    bool validIn;
     do
     {
 
         displayBox(grid);
+        std::cout << "Q|quit\tw|up\ts|down\ta|left\td|right\n";
+        cin >> input;
+        turns++;
 
-<<<<<<< Updated upstream
         if (input == 'Q')
         {
             gameOver = true;
         }
         else if (input == 'w') // moves tiles up
-=======
-        do
->>>>>>> Stashed changes
         {
-            validIn = false;
-            std::cout << "Q|quit\tw|up\ts|down\ta|left\td|right\n";
-            cin >> input;
-            if (input == 'Q')
+            // searches for active tiles
+            for (int x = 0; x < 4; x++)
             {
-                // Ends game early
-                gameOver = true;
-                validIn = true;
-            }
-            else if (input == 'w')
-            {
-                validIn = true;
-                // searches for active tiles
-                for (int x = 0; x < 4; x++)
+                for (int y = 1; y < 4; y++)
                 {
-                    for (int y = 1; y < 4; y++)
+                    if (grid[x][y].isActive())
                     {
-                        if (grid[x][y].isActive())
+                        // checks tiles in same row/column and moves, deactivates, or increases them accordingly
+                        for (int i = 1; i <= y; i++)
                         {
-<<<<<<< Updated upstream
                             // only combine if they are the same value and they have not been combined yet this turn.
                             if (grid[x][y - i].isActive())
-=======
-                            // checks tiles in same row/column and moves, deactivates, or increases them accordingly
-                            for (int i = 1; i <= y; i++)
->>>>>>> Stashed changes
                             {
-                                if (grid[x][y - i].isActive())
+                                if (grid[x][y - i].getValue() == grid[x][y].getValue() && !grid[x][y - i].isCombined())
                                 {
-<<<<<<< Updated upstream
                                     // combines tiles
                                     grid[x][y - i].doubleValue();
                                     grid[x][y].deactivate();
@@ -200,58 +182,26 @@ void game()
                                 grid[x][0] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
-=======
-                                    if (grid[x][y - i].getValue() == grid[x][y].getValue() && !grid[x][y - i].isCombined())
-                                    {
-                                        grid[x][y - i].doubleValue();
-                                        grid[x][y].deactivate();
-                                        i = 100;
-                                    }
-                                    else if (i != 1)
-                                    {
-                                        grid[x][y - i + 1] = grid[x][y];
-                                        grid[x][y].deactivate();
-                                        i = 100;
-                                    }
-                                    else
-                                    {
-                                        i = 100;
-                                    }
-                                }
-                                else if (y - i == 0)
-                                {
-                                    grid[x][0] = grid[x][y];
-                                    grid[x][y].deactivate();
-                                    i = 100;
-                                }
->>>>>>> Stashed changes
                             }
                         }
                     }
                 }
             }
-<<<<<<< Updated upstream
         }
         else if (input == 's') // moves tiles down
         {
             // searches for active tiles
             for (int x = 0; x < 4; x++)
-=======
-            else if (input == 's')
->>>>>>> Stashed changes
             {
-                validIn = true;
-                // searches for active tiles
-                for (int x = 0; x < 4; x++)
+                for (int y = 2; y > -1; y--)
                 {
-                    for (int y = 2; y > -1; y--)
+                    if (grid[x][y].isActive())
                     {
-                        if (grid[x][y].isActive())
+                        // checks tiles in same row/column and moves, deactivates, or increases them accordingly
+                        for (int i = 1; i + y < 4; i++)
                         {
-                            // checks tiles in same row/column and moves, deactivates, or increases them accordingly
-                            for (int i = 1; i + y < 4; i++)
+                            if (grid[x][y + i].isActive())
                             {
-<<<<<<< Updated upstream
                                 // only combine if they are the same value and they have not been combined yet this turn.
                                 if (grid[x][y + i].getValue() == grid[x][y].getValue() && !grid[x][y + i].isCombined())
                                 {
@@ -259,30 +209,9 @@ void game()
                                     grid[x][y + i].doubleValue();
                                     grid[x][y].deactivate();
                                     i = 100;
-=======
-                                if (grid[x][y + i].isActive())
-                                {
-                                    if (grid[x][y + i].getValue() == grid[x][y].getValue() && !grid[x][y + i].isCombined())
-                                    {
-                                        grid[x][y + i].doubleValue();
-                                        grid[x][y].deactivate();
-                                        i = 100;
-                                    }
-                                    else if (i != 1) // does not move if adjacent to the next active tile
-                                    {
-                                        grid[x][y + i - 1] = grid[x][y];
-                                        grid[x][y].deactivate();
-                                        i = 100;
-                                    }
-                                    else
-                                    {
-                                        i = 100;
-                                    }
->>>>>>> Stashed changes
                                 }
-                                else if (y + i == 3)
+                                else if (i != 1) // does not move if adjacent to the next active tile
                                 {
-<<<<<<< Updated upstream
                                     // moves tile to the next empty space
                                     grid[x][y + i - 1] = grid[x][y];
                                     grid[x][y].deactivate();
@@ -300,39 +229,26 @@ void game()
                                 grid[x][3] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
-=======
-                                    grid[x][3] = grid[x][y];
-                                    grid[x][y].deactivate();
-                                    i = 100;
-                                }
->>>>>>> Stashed changes
                             }
                         }
                     }
                 }
             }
-<<<<<<< Updated upstream
         }
         else if (input == 'a')  // moves tiles left
         {
             // searches for active tiles
             for (int y = 0; y < 4; y++)
-=======
-            else if (input == 'a')
->>>>>>> Stashed changes
             {
-                validIn = true;
-                // searches for active tiles
-                for (int y = 0; y < 4; y++)
+                for (int x = 1; x < 4; x++)
                 {
-                    for (int x = 1; x < 4; x++)
+                    if (grid[x][y].isActive())
                     {
-                        if (grid[x][y].isActive())
+                        // checks tiles in same row/column and moves, deactivates, or increases them accordingly
+                        for (int i = 1; i <= x; i++)
                         {
-                            // checks tiles in same row/column and moves, deactivates, or increases them accordingly
-                            for (int i = 1; i <= x; i++)
+                            if (grid[x - i][y].isActive())
                             {
-<<<<<<< Updated upstream
                                 // only combine if they are the same value and they have not been combined yet this turn.
                                 if (grid[x - i][y].getValue() == grid[x][y].getValue() && !grid[x - i][y].isCombined())
                                 {
@@ -360,92 +276,35 @@ void game()
                                 grid[0][y] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
-=======
-                                if (grid[x - i][y].isActive())
-                                {
-                                    if (grid[x - i][y].getValue() == grid[x][y].getValue() && !grid[x - i][y].isCombined())
-                                    {
-                                        grid[x - i][y].doubleValue();
-                                        grid[x][y].deactivate();
-                                        i = 100;
-                                    }
-                                    else if (i != 1)
-                                    {
-                                        grid[x - i + 1][y] = grid[x][y];
-                                        grid[x][y].deactivate();
-                                        i = 100;
-                                    }
-                                    else
-                                    {
-                                        i = 100;
-                                    }
-                                }
-                                else if (x - i == 0)
-                                {
-                                    grid[0][y] = grid[x][y];
-                                    grid[x][y].deactivate();
-                                    i = 100;
-                                }
->>>>>>> Stashed changes
                             }
                         }
                     }
                 }
             }
-<<<<<<< Updated upstream
         }
         else if (input == 'd')  // moves tiles right
         {
             for (int y = 0; y < 4; y++)
-=======
-            else if (input == 'd')
->>>>>>> Stashed changes
             {
-                validIn = true;
-                // searches for active tiles
-                for (int y = 0; y < 4; y++)
+                for (int x = 2; x > -1; x--)
                 {
-                    for (int x = 2; x > -1; x--)
+                    if (grid[x][y].isActive())
                     {
-                        if (grid[x][y].isActive())
+                        // checks tiles in same row/column and moves, deactivates, or increases them accordingly
+                        for (int i = 1; i + x < 4; i++)
                         {
-<<<<<<< Updated upstream
                             // only combine if they are the same value and they have not been combined yet this turn.
                             if (grid[x + i][y].isActive())
-=======
-                            // checks tiles in same row/column and moves, deactivates, or increases them accordingly
-                            for (int i = 1; i + x < 4; i++)
->>>>>>> Stashed changes
                             {
-                                if (grid[x + i][y].isActive())
+                                if (grid[x + i][y].getValue() == grid[x][y].getValue() && !grid[x + i][y].isCombined())
                                 {
-<<<<<<< Updated upstream
                                     // combines tiles
                                     grid[x + i][y].doubleValue();
                                     grid[x][y].deactivate();
                                     i = 100;
-=======
-                                    if (grid[x + i][y].getValue() == grid[x][y].getValue() && !grid[x + i][y].isCombined())
-                                    {
-                                        grid[x + i][y].doubleValue();
-                                        grid[x][y].deactivate();
-                                        i = 100;
-                                    }
-                                    else if (i != 1) // does not move if adjacent to the next active tile
-                                    {
-                                        grid[x + i - 1][y] = grid[x][y];
-                                        grid[x][y].deactivate();
-                                        i = 100;
-                                    }
-                                    else
-                                    {
-                                        i = 100;
-                                    }
->>>>>>> Stashed changes
                                 }
-                                else if (x + i == 3)
+                                else if (i != 1) // does not move if adjacent to the next active tile
                                 {
-<<<<<<< Updated upstream
                                     // moves tile to the next empty space
                                     grid[x + i - 1][y] = grid[x][y];
                                     grid[x][y].deactivate();
@@ -463,23 +322,12 @@ void game()
                                 grid[3][y] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
-=======
-                                    grid[3][y] = grid[x][y];
-                                    grid[x][y].deactivate();
-                                    i = 100;
-                                }
->>>>>>> Stashed changes
                             }
                         }
                     }
                 }
             }
-            else
-            {
-                std::cout << "\tinput not valid. try again.\n\n";
-            }
-        } while (!validIn);
-        turns++;
+        }
 
         // Checks if there are no free squares
 
