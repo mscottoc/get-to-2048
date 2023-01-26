@@ -137,12 +137,11 @@ void game()
         cin >> input;
         turns++;
 
-        // TODO: ADJUST NON UP OPTIONS
         if (input == 'Q')
         {
             gameOver = true;
         }
-        else if (input == 'w')
+        else if (input == 'w') // moves tiles up
         {
             // searches for active tiles
             for (int x = 0; x < 4; x++)
@@ -154,27 +153,32 @@ void game()
                         // checks tiles in same row/column and moves, deactivates, or increases them accordingly
                         for (int i = 1; i <= y; i++)
                         {
+                            // only combine if they are the same value and they have not been combined yet this turn.
                             if (grid[x][y - i].isActive())
                             {
                                 if (grid[x][y - i].getValue() == grid[x][y].getValue() && !grid[x][y - i].isCombined())
                                 {
+                                    // combines tiles
                                     grid[x][y - i].doubleValue();
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
-                                else if (i != 1)
+                                else if (i != 1) // does not move if adjacent to the next active tile
                                 {
+                                    // moves tile to the next empty space
                                     grid[x][y - i + 1] = grid[x][y];
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
                                 else
                                 {
+                                    //ends iteration without changing tile.
                                     i = 100;
                                 }
                             }
                             else if (y - i == 0)
                             {
+                                // moves to the first empty space
                                 grid[x][0] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
@@ -184,7 +188,7 @@ void game()
                 }
             }
         }
-        else if (input == 's')
+        else if (input == 's') // moves tiles down
         {
             // searches for active tiles
             for (int x = 0; x < 4; x++)
@@ -198,25 +202,30 @@ void game()
                         {
                             if (grid[x][y + i].isActive())
                             {
+                                // only combine if they are the same value and they have not been combined yet this turn.
                                 if (grid[x][y + i].getValue() == grid[x][y].getValue() && !grid[x][y + i].isCombined())
                                 {
+                                    // combines tiles
                                     grid[x][y + i].doubleValue();
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
                                 else if (i != 1) // does not move if adjacent to the next active tile
                                 {
+                                    // moves tile to the next empty space
                                     grid[x][y + i - 1] = grid[x][y];
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
                                 else
                                 {
+                                    //ends iteration without changing tile.
                                     i = 100;
                                 }
                             }
                             else if (y + i == 3)
                             {
+                                // moves to the first empty space
                                 grid[x][3] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
@@ -226,7 +235,7 @@ void game()
                 }
             }
         }
-        else if (input == 'a')
+        else if (input == 'a')  // moves tiles left
         {
             // searches for active tiles
             for (int y = 0; y < 4; y++)
@@ -240,25 +249,30 @@ void game()
                         {
                             if (grid[x - i][y].isActive())
                             {
+                                // only combine if they are the same value and they have not been combined yet this turn.
                                 if (grid[x - i][y].getValue() == grid[x][y].getValue() && !grid[x - i][y].isCombined())
                                 {
+                                    // combines tiles
                                     grid[x - i][y].doubleValue();
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
-                                else if (i != 1)
+                                else if (i != 1) // does not move if adjacent to the next active tile
                                 {
+                                    // moves tile to the next empty space
                                     grid[x - i + 1][y] = grid[x][y];
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
                                 else
                                 {
+                                    //ends iteration without changing tile.
                                     i = 100;
                                 }
                             }
                             else if (x - i == 0)
                             {
+                                // moves to the first empty space
                                 grid[0][y] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
@@ -268,7 +282,7 @@ void game()
                 }
             }
         }
-        else if (input == 'd')
+        else if (input == 'd')  // moves tiles right
         {
             for (int y = 0; y < 4; y++)
             {
@@ -279,27 +293,32 @@ void game()
                         // checks tiles in same row/column and moves, deactivates, or increases them accordingly
                         for (int i = 1; i + x < 4; i++)
                         {
+                            // only combine if they are the same value and they have not been combined yet this turn.
                             if (grid[x + i][y].isActive())
                             {
                                 if (grid[x + i][y].getValue() == grid[x][y].getValue() && !grid[x + i][y].isCombined())
                                 {
+                                    // combines tiles
                                     grid[x + i][y].doubleValue();
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
                                 else if (i != 1) // does not move if adjacent to the next active tile
                                 {
+                                    // moves tile to the next empty space
                                     grid[x + i - 1][y] = grid[x][y];
                                     grid[x][y].deactivate();
                                     i = 100;
                                 }
                                 else
                                 {
+                                    //ends iteration without changing tile.
                                     i = 100;
                                 }
                             }
                             else if (x + i == 3)
                             {
+                                // moves to the first empty space
                                 grid[3][y] = grid[x][y];
                                 grid[x][y].deactivate();
                                 i = 100;
@@ -310,7 +329,7 @@ void game()
             }
         }
 
-        // Checks in there are no free squares
+        // Checks if there are no free squares
 
         activeCount = 0;
         inactiveCount = 0;
