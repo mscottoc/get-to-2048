@@ -6,7 +6,7 @@ I chose to make a simple game in c++ in order to tune my skills in it as it had 
 
 I had difficulty figuring out how to make a grid and assign objects on the grid a spot without overlapping. In the end I decided to make a 2 dimensional array of Tile objects and only having a certain number of them be active. I also had difficulty with the tiles being combined with the incorrect tiles. It turned out that when a tile had already combined with another tile, the new value would match with the next active tile in the row/column so they would combine for a second time in one turn. This was both in consistent with the original game and with itself as it would only combine twice if the lower value combination happened first, so I added a variable that would allow the program to know when a tile had already combined that turn so it would not happen twice in a turn.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/WdeCUoqxN14)
 
 # Development Environment
 
